@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Normalize province names and avoid state name in addresses -->
+    <!-- Once module loaded, with Developer mode go to Settings > Technical > -->
+    <!-- Actions > Server Actions, and run the action. -->
+    <record id="action_clean_es_address" model="ir.actions.server">
+        <field name="name">Clean ES address</field>
+        <field name="model_id" ref="base.model_ir_actions_server"/>
+        <field name="state">code</field>
+        <field name="code"><![CDATA[
+#log("START", level="error")
+country_ES = env['res.country'].search([("code", "=", "ES")])
+#raise UserError(country_ES.address_format)
+#log(country_ES.address_format, level='error')
+
+country_ES.write({"address_format": "%(street)s\n%(street2)s\n%(zip)s %(city)s\n%(state_name)s"})
+#raise UserError(country_ES.address_format)
+#log(country_ES.address_format, level='error')
+
+country_states = (
+    ("C", "A Coruña"),
+    ("A", "Alacant"),
+    ("VI", "Araba"),
+    ("PM", "Illes Balears"),
+    ("CS", "Castelló"),
+    ("GI", "Girona"),
+    ("SS", "Gipuzkoa"),
+    ("L", "Lleida"),
+    ("NA", "Nafarroa"),
+    ("OR", "Ourense"),
+    ("V", "València"),
+    ("BI", "Bizkaia"))
+
+for code, name in country_states:
+    country_state = env['res.country.state'].search([("country_id", "=", country_ES.id), ("code", "=", code)])
+    country_state.write({"name": name})
+    #log(country_state.name, level='error')
+      ]]></field>
+    </record>
+</odoo>

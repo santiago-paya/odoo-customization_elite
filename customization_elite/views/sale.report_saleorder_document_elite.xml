@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="report_saleorder_document_elite">
+        <field name="name">ELITE: Report sale order document</field>
+        <field name="inherit_id" ref="sale.report_saleorder_document" />
+        <field name="priority">32</field>
+        <field name="arch" type="xml">
+            <!-- Delete the Comercial contact information -->
+            <xpath expr="//div[@t-if='doc.user_id.name']" position="replace">
+            </xpath>
+        </field>
+    </record>
+</odoo>
